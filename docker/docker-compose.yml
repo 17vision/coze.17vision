@@ -415,10 +415,11 @@ services:
     command: ['/app/opencoze']
 
   coze-web:
-    # build:
-    #   context: ..
-    #   dockerfile: frontend/Dockerfile
-    image: cozedev/coze-studio-web:latest
+    build:
+      context: ..
+      dockerfile: frontend/Dockerfile
+    # image: cozedev/coze-studio-web:latest
+    image: hovision-coze:1.0
     container_name: coze-web
     restart: always
     ports:
@@ -432,7 +433,10 @@ services:
       - coze-server
     networks:
       - coze-network
+      - ycsjnet
 
 networks:
   coze-network:
     driver: bridge
+  ycsjnet:
+    external: true
