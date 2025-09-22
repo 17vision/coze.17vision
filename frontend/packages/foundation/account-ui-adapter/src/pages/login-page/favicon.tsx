@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import FaviconBase from './favicon-base.png';
+import FaviconBase from './yichi-logo.png';
 import FaviconAddon from './favicon-addon.png';
 
 export const Favicon = () => (
