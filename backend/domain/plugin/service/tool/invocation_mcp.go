@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package plugin
+package tool
 
 import (
-	model "github.com/coze-dev/coze-studio/backend/api/model/crossdomain/plugin"
-	"github.com/coze-dev/coze-studio/backend/domain/plugin/entity"
+	"context"
+	"errors"
 )
 
-type CopyPluginRequest struct {
-	PluginID    int64
-	UserID      int64
-	CopyScene   model.CopyScene
-	TargetAPPID *int64
+type mcpCallImpl struct{}
+
+func NewMcpCallImpl() Invocation {
+	return &mcpCallImpl{}
 }
 
-type CopyPluginResponse struct {
-	Plugin *entity.PluginInfo
-	Tools  map[int64]*entity.ToolInfo // old tool id -> new tool id
+func (m *mcpCallImpl) Do(ctx context.Context, args *InvocationArgs) (request string, resp string, err error) {
+	// only for tool debug scene
+	return "", "", errors.New("mcp call not implemented")
 }

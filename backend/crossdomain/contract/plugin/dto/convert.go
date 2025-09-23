@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package plugin
+package dto
 
 import (
 	"net/http"
@@ -88,6 +88,8 @@ var apiAssistTypes = map[common.AssistParameterType]APIFileAssistType{
 	common.AssistParameterType_AUDIO:   AssistTypeAudio,
 	common.AssistParameterType_TXT:     AssistTypeTXT,
 }
+
+// TODO(fanlv): move to other package
 
 func ToAPIAssistType(typ common.AssistParameterType) (APIFileAssistType, bool) {
 	_typ, ok := apiAssistTypes[typ]

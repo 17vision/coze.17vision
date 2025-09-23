@@ -24,8 +24,8 @@ import (
 	"github.com/bytedance/sonic"
 	"github.com/getkin/kin-openapi/openapi3"
 
-	model "github.com/coze-dev/coze-studio/backend/api/model/crossdomain/plugin"
 	"github.com/coze-dev/coze-studio/backend/api/model/plugin_develop/common"
+	model "github.com/coze-dev/coze-studio/backend/crossdomain/contract/plugin/dto"
 	"github.com/coze-dev/coze-studio/backend/pkg/lang/ptr"
 	"github.com/coze-dev/coze-studio/backend/pkg/logs"
 )
@@ -140,6 +140,7 @@ type ProjectInfo = model.ProjectInfo
 
 type PluginManifest = model.PluginManifest
 
+// TODO API.DESC 来给不同 default 值
 func NewDefaultPluginManifest() *PluginManifest {
 	return &model.PluginManifest{
 		SchemaVersion: "v1",

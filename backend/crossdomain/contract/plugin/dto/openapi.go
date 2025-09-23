@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package plugin
+package dto
 
 import (
 	"context"
@@ -445,4 +445,29 @@ func disabledParam(schemaVal *openapi3.Schema) bool {
 	}
 
 	return globalDisable || localDisable
+}
+
+func (op *Openapi3Operation) GetReqBodySchema() (string, *openapi3.SchemaRef) {
+	if op.RequestBody == nil || len(op.RequestBody.Value.Content) == 0 {
+		return "", nil
+	}
+
+	var contentTypeArray = []string{
+		MediaTypeJson,
+		MediaTypeProblemJson,
+		MediaTypeFormURLEncoded,
+		MediaTypeXYaml,
+		MediaTypeYaml,
+	}
+
+	for _, ct := range contentTypeArray {
+		mType := op.RequestBody.Value.Content[ct]
+		if mType == nil {
+			continue
+		}
+
+		return ct, mType.Schema
+	}
+
+	return "", nil
 }

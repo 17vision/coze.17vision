@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package plugin
+package dto
 
 import "github.com/getkin/kin-openapi/openapi3"
 
 type PluginType string
 
 const (
-	PluginTypeOfCloud PluginType = "openapi"
+	PluginTypeOfCloud  PluginType = "openapi"
+	PluginTypeOfMCP    PluginType = "coze-studio-mcp"
+	PluginTypeOfCustom PluginType = "coze-studio-custom"
 )
 
 type AuthzType string
