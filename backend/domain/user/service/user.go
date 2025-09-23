@@ -63,8 +63,17 @@ type CreateUserResponse struct {
 	UserID int64
 }
 
+type ZhideLoginRequest struct {
+	Email       string
+	Name        string
+	Description string
+	SpaceID     int64
+	Locale      string
+}
+
 type User interface {
 	// Create creates or registers a new user.
+	ZhideLogin(ctx context.Context, req *ZhideLoginRequest) (user *entity.User, err error)
 	Create(ctx context.Context, req *CreateUserRequest) (user *entity.User, err error)
 	Login(ctx context.Context, email, password string) (user *entity.User, err error)
 	Logout(ctx context.Context, userID int64) (err error)

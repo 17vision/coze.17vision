@@ -6,6 +6,10 @@ WORKDIR /app
 # Install build dependencies for Go
 RUN apk add --no-cache git gcc libc-dev
 
+# 关键：换代理(2025-09-23 额外加的)
+ENV GOPROXY=https://goproxy.cn,direct
+ENV GOSUMDB=off
+
 # Copy go.mod and go.sum first to leverage Docker cache
 COPY backend/go.mod backend/go.sum ./
 RUN go mod download

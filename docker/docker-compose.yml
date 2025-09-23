@@ -383,10 +383,11 @@ services:
       - coze-network
 
   coze-server:
-    # build:
-    #   context: ../
-    #   dockerfile: backend/Dockerfile
-    image: cozedev/coze-studio-server:latest
+    build:
+      context: ../
+      dockerfile: backend/Dockerfile
+    # image: cozedev/coze-studio-server:latest
+    image: hovision-coze-server:1.0
     restart: always
     container_name: coze-server
     env_file: *env_file
@@ -419,7 +420,7 @@ services:
       context: ..
       dockerfile: frontend/Dockerfile
     # image: cozedev/coze-studio-web:latest
-    image: hovision-coze:1.0
+    image: hovision-coze-web:1.0
     container_name: coze-web
     restart: always
     ports:

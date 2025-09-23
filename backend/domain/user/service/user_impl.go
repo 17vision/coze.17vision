@@ -661,3 +661,120 @@ func userPo2Do(model *model.User, iconURL string) *userEntity.User {
 		UpdatedAt:    model.UpdatedAt,
 	}
 }
+
+// 职得登录
+// 已经创建过了，直接登录
+// 没创建先创建，再登录
+func (u *userImpl) ZhideLogin(ctx context.Context, req *ZhideLoginRequest) (user *userEntity.User, err error) {
+	userModel, exist, err := u.UserRepo.GetUsersByEmail(ctx, req.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	if exist {
+		uniqueSessionID, err := u.IDGen.GenID(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("failed to generate session id: %w", err)
+		}
+
+		sessionKey, err := generateSessionKey(uniqueSessionID)
+		if err != nil {
+			return nil, err
+		}
+
+		// Update user session key
+		err = u.UserRepo.UpdateSessionKey(ctx, userModel.ID, sessionKey)
+		if err != nil {
+			return nil, err
+		}
+
+		userModel.SessionKey = sessionKey
+
+		resURL, err := u.IconOSS.GetObjectUrl(ctx, userModel.IconURI)
+		if err != nil {
+			return nil, err
+		}
+
+		return userPo2Do(userModel, resURL), nil
+	}
+
+	// Hashing passwords using the Argon2id algorithm
+	hashedPassword, err := hashPassword("20251111")
+	if err != nil {
+		return nil, err
+	}
+
+	name := req.Name
+	if name == "" {
+		name = strings.Split(req.Email, "@")[0]
+	}
+
+	userID, err := u.IDGen.GenID(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("generate id error: %w", err)
+	}
+
+	now := time.Now().UnixMilli()
+
+	spaceID := req.SpaceID
+	if spaceID <= 0 {
+		var sid int64
+		sid, err = u.IDGen.GenID(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("gen space_id failed: %w", err)
+		}
+
+		err = u.SpaceRepo.CreateSpace(ctx, &model.Space{
+			ID:          sid,
+			Name:        "Personal Space",
+			Description: "This is your personal space",
+			IconURI:     uploadEntity.EnterpriseIconURI,
+			OwnerID:     userID,
+			CreatorID:   userID,
+			CreatedAt:   now,
+			UpdatedAt:   now,
+		})
+		if err != nil {
+			return nil, fmt.Errorf("create personal space failed: %w", err)
+		}
+
+		spaceID = sid
+	}
+
+	newUser := &model.User{
+		ID:           userID,
+		IconURI:      uploadEntity.UserIconURI,
+		Name:         name,
+		UniqueName:   u.getUniqueNameFormEmail(ctx, req.Email),
+		Email:        req.Email,
+		Password:     hashedPassword,
+		Description:  req.Description,
+		UserVerified: false,
+		Locale:       req.Locale,
+		CreatedAt:    now,
+		UpdatedAt:    now,
+	}
+
+	err = u.UserRepo.CreateUser(ctx, newUser)
+	if err != nil {
+		return nil, fmt.Errorf("insert user failed: %w", err)
+	}
+
+	err = u.SpaceRepo.AddSpaceUser(ctx, &model.SpaceUser{
+		SpaceID:   spaceID,
+		UserID:    userID,
+		RoleType:  1,
+		CreatedAt: now,
+		UpdatedAt: now,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("add space user failed: %w", err)
+	}
+
+	iconURL, err := u.IconOSS.GetObjectUrl(ctx, newUser.IconURI)
+	if err != nil {
+		return nil, fmt.Errorf("get icon url failed: %w", err)
+	}
+
+	return userPo2Do(newUser, iconURL), nil
+}

@@ -27,6 +27,7 @@ import (
 	"github.com/coze-dev/coze-studio/backend/api/model/app/developer_api"
 	"github.com/coze-dev/coze-studio/backend/api/model/passport"
 	"github.com/coze-dev/coze-studio/backend/api/model/playground"
+	"github.com/coze-dev/coze-studio/backend/api/model/zhide"
 	"github.com/coze-dev/coze-studio/backend/application/base/ctxutil"
 	"github.com/coze-dev/coze-studio/backend/domain/user/entity"
 	user "github.com/coze-dev/coze-studio/backend/domain/user/service"
@@ -338,4 +339,24 @@ func userDo2PlaygroundTo(userDo *entity.User) *playground.UserBasicInfo {
 		UserAvatar:     userDo.IconURL,
 		CreateTime:     ptr.Of(userDo.CreatedAt / 1000),
 	}
+}
+
+func (u *UserApplicationService) PassportWebZhideLogin(ctx context.Context, locale string, req *zhide.ZhideUser) (
+	resp *passport.PassportWebEmailRegisterV2PostResponse, sessionKey string, err error,
+) {
+	userInfo, err := u.DomainSVC.ZhideLogin(ctx, &user.ZhideLoginRequest{
+		Email:       req.Email,
+		Name:        req.Nickname,
+		Description: req.Signature,
+		Locale:      locale,
+	})
+
+	if err != nil {
+		return nil, "", err
+	}
+
+	return &passport.PassportWebEmailRegisterV2PostResponse{
+		Data: userDo2PassportTo(userInfo),
+		Code: 0,
+	}, userInfo.SessionKey, nil
 }
