@@ -238,13 +238,11 @@ func Register(r *server.Hertz) {
 			{
 				_web := _passport.Group("/web", _webMw()...)
 				{
-					// ========== 手动追加 开始（hz update 后需人工检查） ==========
-					_zhide := _api.Group("/zhide", _zhideMw()...)
-
-					_zhide.POST("/login", append(_zhideLoginMw(), coze.ZhideLogin)...)
-
-					// ========== 手动追加 结束 ==========
-
+					_zhide := _web.Group("/zhide")
+					{
+						_login := _zhide.Group("/login")
+						_login.POST("/", coze.ZhideLogin)
+					}
 					_email := _web.Group("/email", _emailMw()...)
 					{
 						_login := _email.Group("/login", _loginMw()...)

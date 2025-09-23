@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol"
 	"github.com/coze-dev/coze-studio/backend/api/model/zhide"
 	"github.com/coze-dev/coze-studio/backend/application/user"
@@ -25,6 +24,7 @@ func ZhideLogin(ctx context.Context, c *app.RequestContext) {
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
+
 	// 1️⃣ 简单白名单校验，这里先不校验，后边再完善
 
 	// 2️⃣ 请求平台验签
@@ -32,13 +32,18 @@ func ZhideLogin(ctx context.Context, c *app.RequestContext) {
 	b, _ := json.Marshal(map[string]string{"token": req.Token})
 	resp, err := cli.Post(req.Url, "application/json", bytes.NewReader(b))
 	if err != nil || resp.StatusCode != http.StatusOK {
-		c.JSON(401, utils.H{"msg": "平台 token 验签失败"})
+		c.String(http.StatusBadRequest, "token 验签失败")
 		return
 	}
 
 	var pinfo zhide.ZhideUser
 	if err = json.NewDecoder(resp.Body).Decode(&pinfo); err != nil {
-		c.JSON(500, utils.H{"msg": "平台返回格式异常"})
+		c.String(http.StatusBadRequest, "返回格式异常")
+		return
+	}
+
+	if pinfo.Email == "" {
+		c.String(http.StatusBadRequest, "用户缺少 Email")
 		return
 	}
 

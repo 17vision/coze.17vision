@@ -27,17 +27,6 @@ func rootMw() []app.HandlerFunc {
 	return nil
 }
 
-// ========== 手动追加 开始（hz update 后需人工检查） ==========
-func _zhideMw() []app.HandlerFunc {
-	return nil
-}
-
-func _zhideLoginMw() []app.HandlerFunc {
-	return nil
-}
-
-// ========== 手动追加 结束 ==========
-
 func _apiMw() []app.HandlerFunc {
 	// your code...
 	return nil

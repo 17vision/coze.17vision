@@ -1,8 +1,8 @@
 package zhide
 
 type ZhideLoginRequest struct {
-	Token string `form:"token,required" json:"token" query:"token,required"`
-	Url   string `form:"url,required" json:"url" query:"url,required"`
+	Token string `thrift:"token,required" form:"token,required" json:"token" query:"token,required"`
+	Url   string `thrift:"url,required" form:"url,required" json:"url" query:"url,required"`
 }
 
 type ZhideLoginResponse struct {
