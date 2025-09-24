@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package entity
+package env
 
-type PageInfo struct {
-	Name       *string
-	Page       int
-	Size       int
-	SortBy     *SortField
-	OrderByACS *bool
+import (
+	"os"
+	"strings"
+)
+
+func GetServerHost() string {
+	host := os.Getenv("SERVER_HOST")
+	if strings.HasPrefix(host, "http://") || strings.HasPrefix(host, "https://") {
+		return host
+	}
+	return "https://" + host
 }

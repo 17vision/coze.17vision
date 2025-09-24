@@ -14,17 +14,8 @@
  * limitations under the License.
  */
 
-package conf
+package entity
 
-import (
-	"os"
-	"strings"
-)
+import "github.com/coze-dev/coze-studio/backend/crossdomain/contract/plugin/model"
 
-func GetServerHost() string {
-	host := os.Getenv("SERVER_HOST")
-	if strings.HasPrefix(host, "http://") || strings.HasPrefix(host, "https://") {
-		return host
-	}
-	return "https://" + host
-}
+type ToolInfo = model.ToolInfo
