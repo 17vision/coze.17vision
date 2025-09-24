@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { type FC, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 
 import { CozeBrand } from '@coze-studio/components/coze-brand';
 import { I18n } from '@coze-arch/i18n';
@@ -33,9 +33,31 @@ export const LoginPage: FC = () => {
         email,
         password,
     });
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get('token');
+    const redirectUrl = url.searchParams.get('url');
+    const session_key = localStorage.getItem('coze_current_uid');
+
+    const { zhidelogin } = useLoginService({
+        token,
+        url: redirectUrl
+    });
+    useEffect(() => {
+        if (token && redirectUrl && !session_key) {
+            console.log('token', token, 'redirectUrl', redirectUrl);
+            // 直接免登，不渲染 UI
+            zhidelogin();
+        }
+    }, []);
 
     const submitDisabled = !email || !password || hasError;
-
+    if (token && redirectUrl && !session_key) {
+        return (
+            <div className="w-full h-full flex items-center justify-center">
+                <span className="mt-4 text-gray-700 text-lg font-medium animate-pulse">正在登录...</span>
+            </div>
+        );
+    }
     return (
         <SignFrame >
             <SignPanel className="w-[600px] h-[560px] pt-[96px]">
@@ -97,28 +119,31 @@ export const LoginPage: FC = () => {
                         >
                             {I18n.t('login_button_text')}
                         </Button>
-                        {/**
-             * <Button
-              data-testid="login.button.signup"
-              className="mt-[20px]"
-              disabled={submitDisabled || loginLoading}
-              onClick={register}
-              loading={registerLoading}
-              color="primary"
-            >
-              {I18n.t('register')}
-            </Button>
-            <div className="mt-[12px] flex justify-center">
-              <a
-                data-testid="login.link.terms"
-                href="https://github.com/coze-dev/coze-studio?tab=Apache-2.0-1-ov-file"
-                target="_blank"
-                className="no-underline coz-fg-hglt"
-              >
-                {I18n.t('open_source_terms_linkname')}
-              </a>
-            </div>
-             */
+                        {
+                            /**
+ * 
+<Button
+    data-testid="login.button.signup"
+    className="mt-[20px]"
+    disabled={submitDisabled || loginLoading}
+    onClick={register}
+    loading={registerLoading}
+    color="primary"
+>
+    {I18n.t('register')}
+</Button>
+
+<div className="mt-[12px] flex justify-center">
+  <a
+    data-testid="login.link.terms"
+    href="https://github.com/coze-dev/coze-studio?tab=Apache-2.0-1-ov-file"
+    target="_blank"
+    className="no-underline coz-fg-hglt"
+  >
+    {I18n.t('open_source_terms_linkname')}
+  </a>
+</div>
+ */
                         }
                     </div>
                 </div>

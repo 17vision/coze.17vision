@@ -36,6 +36,10 @@ export interface PassportWebEmailRegisterV2PostRequest {
   password: string,
   email: string,
 }
+export interface zhidePostRequest {
+  token: string,
+  url: string,
+}
 export interface PassportWebEmailRegisterV2PostResponse {
   data: User,
   code: number,
@@ -124,6 +128,18 @@ export const PassportWebEmailLoginPost = /*#__PURE__*/createAPI<PassportWebEmail
   "reqType": "PassportWebEmailLoginPostRequest",
   "reqMapping": {
     "body": ["email", "password"]
+  },
+  "resType": "PassportWebEmailLoginPostResponse",
+  "schemaRoot": "api://schemas/idl_passport_passport",
+  "service": "passport"
+});
+export const zhidePostLogin = /*#__PURE__*/createAPI<zhidePostRequest, PassportWebEmailLoginPostResponse>({
+  "url": "/api/passport/web/zhide/login/",
+  "method": "POST",
+  "name": "zhidePostLogin",
+  "reqType": "zhidePostRequest",
+  "reqMapping": {
+    "body": ["token", "url"]
   },
   "resType": "PassportWebEmailLoginPostResponse",
   "schemaRoot": "api://schemas/idl_passport_passport",

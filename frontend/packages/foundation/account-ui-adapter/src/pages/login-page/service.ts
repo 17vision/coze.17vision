@@ -28,15 +28,32 @@ import {
 export const useLoginService = ({
   email,
   password,
+  url,
+  token,
 }: {
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
+  url?: string;
+  token?: string;
 }) => {
   const loginService = useRequest(
     async () => {
       const res = (await passport.PassportWebEmailLoginPost({
         email,
         password,
+      })) as unknown as { data: UserInfo };
+      return res.data;
+    },
+    {
+      manual: true,
+      onSuccess: setUserInfo,
+    },
+  );
+  const zhidelogin = useRequest(
+    async () => {
+      const res = (await passport.zhidePostLogin({
+        url,
+        token,
       })) as unknown as { data: UserInfo };
       return res.data;
     },
@@ -71,6 +88,7 @@ export const useLoginService = ({
 
   return {
     login: loginService.run,
+    zhidelogin: zhidelogin.run,
     register: registerService.run,
     loginLoading: loginService.loading,
     registerLoading: registerService.loading,
