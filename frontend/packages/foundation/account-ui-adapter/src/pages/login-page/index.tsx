@@ -16,7 +16,7 @@
 
 import { type FC, useEffect, useState } from 'react';
 
-import { CozeBrand } from '@coze-studio/components/coze-brand';
+// import { CozeBrand } from '@coze-studio/components/coze-brand';
 import { I18n } from '@coze-arch/i18n';
 import { Button, Form } from '@coze-arch/coze-design';
 import { SignFrame, SignPanel } from '@coze-arch/bot-semi';
@@ -34,24 +34,22 @@ export const LoginPage: FC = () => {
         password,
     });
     const url = new URL(window.location.href);
-    const token = url.searchParams.get('token');
-    const redirectUrl = url.searchParams.get('url');
-    const session_key = localStorage.getItem('coze_current_uid');
+    const token = url.searchParams.get('token') || sessionStorage.getItem('zhide_current_token');
+    const redirectUrl = url.searchParams.get('url') || sessionStorage.getItem('zhideRedirectUrl');
+    const coze_current_uid = localStorage.getItem('coze_current_uid');
 
     const { zhidelogin } = useLoginService({
         token,
         url: redirectUrl
     });
     useEffect(() => {
-        if (token && redirectUrl && !session_key) {
-            console.log('token', token, 'redirectUrl', redirectUrl);
-            // 直接免登，不渲染 UI
+        if (token && redirectUrl && !coze_current_uid) {
             zhidelogin();
         }
     }, []);
 
     const submitDisabled = !email || !password || hasError;
-    if (token && redirectUrl && !session_key) {
+    if (token && redirectUrl && !coze_current_uid) {
         return (
             <div className="w-full h-full flex items-center justify-center">
                 <span className="mt-4 text-gray-700 text-lg font-medium animate-pulse">正在登录...</span>

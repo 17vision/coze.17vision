@@ -24,31 +24,32 @@ import './global.less';
 import './index.less';
 
 const initFlags = () => {
-  pullFeatureFlags({
-    timeout: 1000 * 4,
-    fetchFeatureGating: () => Promise.resolve({} as unknown as FEATURE_FLAGS),
-  });
+    pullFeatureFlags({
+        timeout: 1000 * 4,
+        fetchFeatureGating: () => Promise.resolve({} as unknown as FEATURE_FLAGS),
+    });
 };
 
 const main = () => {
-  // Initialize the value of the function switch
-  initFlags();
-  // Initialize i18n
-  initI18nInstance({
-    lng: (localStorage.getItem('i18next') ?? (IS_OVERSEA ? 'en' : 'zh-CN')) as
-      | 'en'
-      | 'zh-CN',
-  });
-  // Import mdbox styles dynamically
-  dynamicImportMdBoxStyle();
 
-  const $root = document.getElementById('root');
-  if (!$root) {
-    throw new Error('root element not found');
-  }
-  const root = createRoot($root);
+    // Initialize the value of the function switch
+    initFlags();
+    // Initialize i18n
+    initI18nInstance({
+        lng: (localStorage.getItem('i18next') ?? (IS_OVERSEA ? 'en' : 'zh-CN')) as
+            | 'en'
+            | 'zh-CN',
+    });
+    // Import mdbox styles dynamically
+    dynamicImportMdBoxStyle();
 
-  root.render(<App />);
+    const $root = document.getElementById('root');
+    if (!$root) {
+        throw new Error('root element not found');
+    }
+    const root = createRoot($root);
+
+    root.render(<App />);
 };
 
 main();

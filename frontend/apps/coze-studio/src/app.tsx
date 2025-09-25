@@ -22,15 +22,27 @@ import { Spin } from '@coze-arch/coze-design';
 import { router } from './routes';
 
 export function App() {
-  return (
-    <Suspense
-      fallback={
-        <div className="w-full h-full flex items-center justify-center">
-          <Spin spinning style={{ height: '100%', width: '100%' }} />
-        </div>
-      }
-    >
-      <RouterProvider router={router} fallbackElement={<div>loading...</div>} />
-    </Suspense>
-  );
+    console.log();
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get('token');
+    const redirectUrl = url.searchParams.get('url');
+    const coze_current_uid = localStorage.getItem('coze_current_uid');
+
+    if (token && redirectUrl && !coze_current_uid) {
+        sessionStorage.setItem('zhideRedirectUrl', redirectUrl);
+        sessionStorage.setItem('zhide_current_token', token);
+        // 直接免登，不渲染 UI
+        console.log('App', token, redirectUrl);
+    }
+    return (
+        <Suspense
+            fallback={
+                <div className="w-full h-full flex items-center justify-center">
+                    <Spin spinning style={{ height: '100%', width: '100%' }} />
+                </div>
+            }
+        >
+            <RouterProvider router={router} fallbackElement={<div>loading...</div>} />
+        </Suspense>
+    );
 }
