@@ -22,13 +22,11 @@ import { Spin } from '@coze-arch/coze-design';
 import { router } from './routes';
 
 export function App() {
-    console.log();
     const url = new URL(window.location.href);
     const token = url.searchParams.get('token');
     const redirectUrl = url.searchParams.get('url');
-    const coze_current_uid = localStorage.getItem('coze_current_uid');
 
-    if (token && redirectUrl && !coze_current_uid) {
+    if (token && redirectUrl ) {
         sessionStorage.setItem('zhideRedirectUrl', redirectUrl);
         sessionStorage.setItem('zhide_current_token', token);
         // 直接免登，不渲染 UI
