@@ -973,7 +973,7 @@
   "datasets_createFileModel_step1_urlTitle": "Online data",
   "datasets_createFileModel_step2": "Upload",
   "datasets_createFileModel_step2_UploadDoc": "Click to upload or drag and drop files here",
-  "datasets_createFileModel_step2_UploadDoc_description": "Up to {maxDocNum} files in {fileFormat} format, with a maximum file size of {filesize} MB. PDF files can only contain {pdfPageNum} pages.",
+  "datasets_createFileModel_step2_UploadDoc_description": "Up to {maxDocNum} files in {fileFormat} format, with a maximum file size of {filesize} MB.",
   "datasets_createFileModel_step3": "Set segmentation",
   "datasets_createFileModel_step3_auto": "Automatic segmentation & Cleaning",
   "datasets_createFileModel_step3_autoDescription": "Automatic segmentation & Preprocessing rules",

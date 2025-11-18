@@ -29,6 +29,6 @@ export enum TableSettingFormFields {
 }
 
 /** Knowledge base upload file maximum size 100MB */
-export const UNIT_MAX_MB = 100;
+export const UNIT_MAX_MB = 500;
 
 export const PDF_MAX_PAGES = 500;
