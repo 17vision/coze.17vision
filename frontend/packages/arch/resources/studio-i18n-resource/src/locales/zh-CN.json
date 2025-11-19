@@ -981,7 +981,7 @@
   "datasets_createFileModel_step1_urlTitle": "在线数据",
   "datasets_createFileModel_step2": "上传",
   "datasets_createFileModel_step2_UploadDoc": "点击上传或拖拽文档到这里",
-  "datasets_createFileModel_step2_UploadDoc_description": "支持 {fileFormat}，最多可上传 {maxDocNum} 个文件，每个文件不超过 {filesize}",
+  "datasets_createFileModel_step2_UploadDoc_description": "支持 {fileFormat}，每个文件不超过 {filesize}",
   "datasets_createFileModel_step3": "分段设置",
   "datasets_createFileModel_step3_auto": "自动分段与清洗",
   "datasets_createFileModel_step3_autoDescription": "自动分段与预处理规则",

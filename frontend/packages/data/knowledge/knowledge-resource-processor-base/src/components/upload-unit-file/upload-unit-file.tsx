@@ -101,7 +101,6 @@ export const UploadUnitFile: FC<UploadUnitFileProps> = props => {
       data-testid={KnowledgeE2e.UploadUnitFile}
       multiple={multiple}
       fileList={fileList}
-      disabled={uploadDisabled}
       previewFile={PreviewFile}
       onAcceptInvalid={handleAcceptInvalid}
       beforeUpload={beforeUpload}
@@ -112,7 +111,7 @@ export const UploadUnitFile: FC<UploadUnitFileProps> = props => {
       {...uploadProps}
       className={classNames(styles.upload, uploadProps.className)}
     >
-      {unitList.length >= limit && showIllustration ? (
+      {/* {unitList.length >= limit && showIllustration ? (
         <div
           className={styles['create-enough-file']}
           onClick={e => e.stopPropagation()}
@@ -124,7 +123,7 @@ export const UploadUnitFile: FC<UploadUnitFileProps> = props => {
             })}
           </div>
         </div>
-      ) : null}
+      ) : null} */}
     </Upload>
   );
 };
